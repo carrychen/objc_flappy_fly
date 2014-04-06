@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>1B986946-D757-4D66-9CDA-506B84C22FAF</string>
+	<key>IDESourceControlProjectName</key>
+	<string>FlappyFly</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>F291A96B-3718-45BF-A3C5-22502479D05C</key>
+		<string>ssh://github.com/rickarubio/objc_flappy_fly.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>FlappyFly.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>F291A96B-3718-45BF-A3C5-22502479D05C</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/rickarubio/objc_flappy_fly.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>F291A96B-3718-45BF-A3C5-22502479D05C</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>F291A96B-3718-45BF-A3C5-22502479D05C</string>
+			<key>IDESourceControlWCCName</key>
+			<string>FlappyFly.spritebuilder</string>
+		</dict>
+	</array>
+</dict>
+</plist>
