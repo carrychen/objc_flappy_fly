@@ -28,6 +28,16 @@ typedef NS_ENUM(NSInteger, DrawingOrder) {
     CCButton *_restartButton;
     BOOL _gameOver;
     CGFloat _scrollSpeed;
+    NSInteger _points;
+    CCLabelTTF *_scoreLabel;
+}
+
+// collision handler when playe reaches a goal
+-(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair *)pair hero:(CCNode *)hero goal:(CCNode *)goal {
+    [goal removeFromParent];
+    _points++;
+    _scoreLabel.string = [NSString stringWithFormat:@"%d", _points];
+    return TRUE;
 }
 
 - (void)spawnNewObstacle {
