@@ -284,8 +284,6 @@
 						</array>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>baseClass</key>
@@ -427,9 +425,9 @@
 						<key>displayName</key>
 						<string>CCBFile</string>
 						<key>memberVarAssignmentName</key>
-						<string></string>
+						<string>_hero</string>
 						<key>memberVarAssignmentType</key>
-						<integer>0</integer>
+						<integer>1</integer>
 						<key>physicsBody</key>
 						<dict>
 							<key>affectedByGravity</key>
@@ -514,6 +512,8 @@
 								<string>Hero.ccb</string>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 				</array>
 				<key>customClass</key>
