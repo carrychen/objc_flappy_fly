@@ -76,6 +76,24 @@ static const CGFloat distanceBetweenObstacles = 160.f;
             [_hero.physicsBody applyAngularImpulse:-40000.f*delta];
         }
     }
+    // spawn new obstacles when old ones leave the screen
+    NSMutableArray *offScreenObstacles = nil;
+    for (CCNode *obstacle in _obstacles) {
+        CGPoint obstacleWorldPosition = [_physicsNode convertToWorldSpace:obstacle.position];
+        CGPoint obstacleScreenPosition = [self convertToNodeSpace:obstacleWorldPosition];
+        if (obstacleScreenPosition.x < -obstacle.contentSize.width) {
+            if (!offScreenObstacles) {
+                offScreenObstacles = [NSMutableArray array];
+            }
+            [offScreenObstacles addObject:obstacle];
+        }
+    }
+    for (CCNode *obstacleToRemove in offScreenObstacles) {
+        [obstacleToRemove removeFromParent];
+        [_obstacles removeObject:obstacleToRemove];
+        // for each removed obstacle, add a new one
+        [self spawnNewObstacle];
+    }
 }
 
 @end
