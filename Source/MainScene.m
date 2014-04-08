@@ -15,6 +15,7 @@ static const CGFloat scrollSpeed = 80.f;
     CCNode *_ground1;
     CCNode *_ground2;
     NSArray *_grounds;
+    NSTimeInterval _sinceTouch;
 }
 
 - (void)didLoadFromCCB {
@@ -24,6 +25,8 @@ static const CGFloat scrollSpeed = 80.f;
 
 - (void)touchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
     [_hero.physicsBody applyImpulse:ccp(0, 400.0f)];
+    [_hero.physicsBody applyAngularImpulse:10000.0f];
+    _sinceTouch = 0.f;
 }
 
 - (void)update:(CCTime)delta {
@@ -42,6 +45,16 @@ static const CGFloat scrollSpeed = 80.f;
         // clamp velocity
         float yVelocity = clampf(_hero.physicsBody.velocity.y, -1 * MAXFLOAT, 200.0f);
         _hero.physicsBody.velocity = ccp(0, yVelocity);
+        // limit fly rotation and begin downwards angling if no touch has occured in awhile
+        _sinceTouch += delta;
+        _hero.rotation = clampf(_hero.rotation, -30.0f, 90.f);
+        if (_hero.physicsBody.allowsRotation) {
+            float angularVelocity = clampf(_hero.physicsBody.angularVelocity, -2.f, 1.f);
+            _hero.physicsBody.angularVelocity = angularVelocity;
+        }
+        if ((_sinceTouch > 0.5f)) {
+            [_hero.physicsBody applyAngularImpulse:-40000.f*delta];
+        }
     }
 }
 
