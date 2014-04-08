@@ -25,6 +25,9 @@ typedef NS_ENUM(NSInteger, DrawingOrder) {
     NSArray *_grounds;
     NSTimeInterval _sinceTouch;
     NSMutableArray *_obstacles;
+    CCButton *_restartButton;
+    BOOL _gameOver;
+    CGFloat _scrollSpeed;
 }
 
 - (void)spawnNewObstacle {
@@ -43,6 +46,7 @@ typedef NS_ENUM(NSInteger, DrawingOrder) {
 }
 
 - (void)didLoadFromCCB {
+    _scrollSpeed = 80.f;
     self.userInteractionEnabled = TRUE;
     _grounds = @[_ground1, _ground2];
     for (CCNode *ground in _grounds) {
@@ -62,19 +66,43 @@ typedef NS_ENUM(NSInteger, DrawingOrder) {
 }
 
 - (void)touchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
-    [_hero.physicsBody applyImpulse:ccp(0, 400.0f)];
-    [_hero.physicsBody applyAngularImpulse:10000.0f];
-    _sinceTouch = 0.f;
+    if (!_gameOver) {
+        [_hero.physicsBody applyImpulse:ccp(0, 400.f)];
+        [_hero.physicsBody applyAngularImpulse:10000.f];
+        _sinceTouch = 0.f;
+    }
 }
 
+// collision handling method
 -(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair *)pair hero:(CCNode *)hero level:(CCNode *)level {
-    NSLog(@"Game Over");
+    [self gameOver];
     return TRUE;
 }
 
+- (void)restart {
+    CCScene *scene = [CCBReader loadAsScene:@"MainScene"];
+    [[CCDirector sharedDirector]replaceScene:scene];
+}
+
+- (void)gameOver {
+    if (!_gameOver) {
+        _scrollSpeed = 0.f;
+        _gameOver = TRUE;
+        _restartButton.visible = TRUE;
+        _hero.rotation = 90.f;
+        _hero.physicsBody.allowsRotation = FALSE;
+        [_hero stopAllActions];
+        CCActionMoveBy *moveBy = [CCActionMoveBy actionWithDuration:0.2f position:ccp(-2, 2)];
+        CCActionInterval *reverseMovement = [moveBy reverse];
+        CCActionSequence *shakeSequence = [CCActionSequence actionWithArray:@[moveBy, reverseMovement]];
+        CCActionEaseBounce *bounce = [CCActionEaseBounce actionWithAction:shakeSequence];
+        [self runAction:bounce];
+    }
+}
+
 - (void)update:(CCTime)delta {
-    _hero.position = ccp(_hero.position.x + delta * scrollSpeed, _hero.position.y);
-    _physicsNode.position = ccp(_physicsNode.position.x - (scrollSpeed *delta), _physicsNode.position.y);
+    _hero.position = ccp(_hero.position.x + delta * _scrollSpeed, _hero.position.y);
+    _physicsNode.position = ccp(_physicsNode.position.x - (_scrollSpeed *delta), _physicsNode.position.y);
     // loop the ground
     for (CCNode *ground in _grounds) {
         // get the world position of the ground
