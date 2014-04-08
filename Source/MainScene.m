@@ -39,6 +39,9 @@ static const CGFloat scrollSpeed = 80.f;
         if (groundScreenPosition.x <= (-1 * ground.contentSize.width)) {
             ground.position = ccp(ground.position.x + 2 * ground.contentSize.width, ground.position.y);
         }
+        // clamp velocity
+        float yVelocity = clampf(_hero.physicsBody.velocity.y, -1 * MAXFLOAT, 200.0f);
+        _hero.physicsBody.velocity = ccp(0, yVelocity);
     }
 }
 
