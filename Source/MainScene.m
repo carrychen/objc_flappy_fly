@@ -19,6 +19,11 @@ static const CGFloat scrollSpeed = 80.f;
 
 - (void)didLoadFromCCB {
     _grounds = @[_ground1, _ground2];
+    self.userInteractionEnabled = true;
+}
+
+- (void)touchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
+    [_hero.physicsBody applyImpulse:ccp(0, 400.0f)];
 }
 
 - (void)update:(CCTime)delta {
