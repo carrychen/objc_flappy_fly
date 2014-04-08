@@ -7,9 +7,15 @@
 //
 
 #import "MainScene.h"
+#import "Obstacle.h"
 static const CGFloat scrollSpeed = 80.f;
 static const CGFloat firstObstaclePosition = 280.f;
 static const CGFloat distanceBetweenObstacles = 160.f;
+typedef NS_ENUM(NSInteger, DrawingOrder) {
+    DrawingOrderPipes,
+    DrawingOrderGround,
+    DrawingOrdeHero
+};
 
 @implementation MainScene {
     CCSprite *_hero;
@@ -24,19 +30,31 @@ static const CGFloat distanceBetweenObstacles = 160.f;
 - (void)spawnNewObstacle {
     CCNode *previousObstacle = [_obstacles lastObject];
     CGFloat previousObstacleXPosition = previousObstacle.position.x;
-    if(!previousObstacle) {
+    if (!previousObstacle) {
         // this is the first obstacle
         previousObstacleXPosition = firstObstaclePosition;
     }
-    CCNode *obstacle = [CCBReader load:@"Obstacle"];
+    Obstacle *obstacle = (Obstacle *)[CCBReader load:@"Obstacle"];
     obstacle.position = ccp(previousObstacleXPosition + distanceBetweenObstacles, 0);
+    obstacle.zOrder = DrawingOrderPipes;
+    [obstacle setupRandomPosition];
     [_physicsNode addChild:obstacle];
     [_obstacles addObject:obstacle];
 }
 
 - (void)didLoadFromCCB {
+    self.userInteractionEnabled = TRUE;
     _grounds = @[_ground1, _ground2];
-    self.userInteractionEnabled = true;
+    for (CCNode *ground in _grounds) {
+        // set collision txpe
+        ground.physicsBody.collisionType = @"level";
+        ground.zOrder = DrawingOrderGround;
+    }
+    // set this class as delegate
+    _physicsNode.collisionDelegate = self;
+    // set collision txpe
+    _hero.physicsBody.collisionType = @"hero";
+    _hero.zOrder = DrawingOrdeHero;
     _obstacles = [NSMutableArray array];
     [self spawnNewObstacle];
     [self spawnNewObstacle];
@@ -47,6 +65,11 @@ static const CGFloat distanceBetweenObstacles = 160.f;
     [_hero.physicsBody applyImpulse:ccp(0, 400.0f)];
     [_hero.physicsBody applyAngularImpulse:10000.0f];
     _sinceTouch = 0.f;
+}
+
+-(BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair *)pair hero:(CCNode *)hero level:(CCNode *)level {
+    NSLog(@"Game Over");
+    return TRUE;
 }
 
 - (void)update:(CCTime)delta {
